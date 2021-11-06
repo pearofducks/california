@@ -21,7 +21,7 @@ const props = defineProps({
 const month = computed(() => getMonth(props.displayMonth))
 const year = computed(() => getYear(props.displayMonth))
 const start = computed(() => startOfMonth(props.displayMonth))
-const numberOfWeeks = computed(() => getWeeksInMonth(props.displayMonth))
+const numberOfWeeks = computed(() => getWeeksInMonth(props.displayMonth, { weekStartsOn: 1 }))
 
 const computeMonth = (firstOfMonth, weeksInMonth) => {
   let dateIndex = startOfWeek(firstOfMonth, { weekStartsOn: 1 })
