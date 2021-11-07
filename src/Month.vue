@@ -3,15 +3,14 @@
     <h4 class="text-center py-8 mb-0">{{ months[month] }} {{ year }}</h4>
     <weekday-titles />
     <article v-for="week in monthModel" :key="week" class="grid grid-cols-7 text-14 justify-items-center">
-      <p class="mb-0 tabular-nums w-full text-center p-8 transition-all rounded-full hover:bg-gray-200 cursor-pointer" v-for="d in week" :key="d" @click="show(d)">
-        <span v-if="getMonth(d) === month">{{ lightFormat(d, 'd') }}</span>
-      </p>
+      <day v-for="d in week" :key="d" :date="d" :month="month" @click="show" />
     </article>
   </section>
 </template>
 
 <script setup>
 import WeekdayTitles from './WeekdayTitles.vue'
+import Day from './Day.vue'
 import { addMonths, getMonth, getYear, startOfWeek, getWeeksInMonth, startOfMonth, endOfMonth, addDays, lightFormat } from 'date-fns'
 import { computed } from 'vue'
 
@@ -25,13 +24,12 @@ const numberOfWeeks = computed(() => getWeeksInMonth(props.displayMonth, { weekS
 
 const computeMonth = (firstOfMonth, weeksInMonth) => {
   let dateIndex = startOfWeek(firstOfMonth, { weekStartsOn: 1 })
-  return Array.from({ length: weeksInMonth }, (week = []) => {
-    Array.from({ length: 7 }, _ => {
-      week.push(dateIndex)
+  return Array.from({ length: weeksInMonth }, () => {
+    return Array.from({ length: 7 }, () => {
+      const date = dateIndex
       dateIndex = addDays(dateIndex, 1)
+      return date
     })
-
-    return week
   })
 }
 
