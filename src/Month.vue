@@ -1,9 +1,14 @@
 <template>
   <section style="max-width: 240px">
-    <h4 class="text-center py-8 mb-0">{{ months[month] }} {{ year }}</h4>
+      <!-- FIXME - flip when moving the other way -->
+      <h4 class="text-center py-8 mb-0 relative overflow-hidden flex justify-center">
+        <transition name="tab">
+          <div class="transition-all" :key="monthName">{{ monthName }} {{ year }}</div>
+        </transition>
+      </h4>
     <weekday-titles />
     <article v-for="week in monthModel" :key="week" class="grid grid-cols-7 text-14 justify-items-center">
-      <day v-for="d in week" :key="d" :date="d" :month="month" @click="show" />
+      <day v-for="d in week" :key="d" :date="d" :month="month" @select="show" />
     </article>
   </section>
 </template>
@@ -35,5 +40,18 @@ const computeMonth = (firstOfMonth, weeksInMonth) => {
 
 const monthModel = computed(() => computeMonth(start.value, numberOfWeeks.value))
 const months = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember']
+const monthName = computed(() => months[month.value])
 const show = date => window.alert(date)
 </script>
+
+<style>
+.tab-enter-from {
+  position: absolute;
+  transform: translateY(100%);
+}
+.tab-leave-to {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(-100%);
+}
+</style>
