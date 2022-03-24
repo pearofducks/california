@@ -1,38 +1,35 @@
 <template>
   <section style="max-width: 240px">
-      <!-- FIXME - flip when moving the other way -->
-      <h4 class="text-center py-8 mb-0 relative overflow-hidden flex justify-center">
-        <transition :name="changedForward ? 'tab' : 'tab-back'">
-          <div class="transition-all" :key="monthName">{{ monthName }} {{ year }}</div>
-        </transition>
-      </h4>
-    <weekday-titles />
-    <article v-for="week in monthModel" :key="week" class="grid grid-cols-7 text-14 justify-items-center">
-      <day v-for="d in week" :key="d.date" :date="d.date" :month="month" @select="show" :decorations="d.decorations" />
-    </article>
+    <h4 class="text-center py-8 mb-0 relative overflow-hidden flex justify-center">
+      <transition :name="changedForward ? 'tab' : 'tab-back'">
+        <div class="transition-all" :key="monthTitle">{{ monthTitle }}</div>
+      </transition>
+    </h4>
+    <table role="grid">
+      <weekday-titles />
+      <tr v-for="week in monthModel" :key="week" class="grid grid-cols-7 text-14 justify-items-center">
+        <day v-for="d in week" :key="d.date" :date="d.date" :month="month" @select="show" :decorations="d.decorations" />
+      </tr>
+    </table>
   </section>
 </template>
 
 <script setup>
 import WeekdayTitles from './WeekdayTitles.vue'
 import Day from './Day.vue'
-import { addMonths, getMonth, getYear, startOfWeek, getWeeksInMonth, startOfMonth, endOfMonth, addDays, lightFormat } from 'date-fns'
+import { format, getMonth, getYear } from 'date-fns'
+import { nb } from 'date-fns/locale'
 import { computed, ref, watch } from 'vue'
 import { computeMonth } from '../logic.js'
 
 const props = defineProps({
-  displayMonth: Object
+  displayMonth: Date
 })
-const month = computed(() => getMonth(props.displayMonth))
-const year = computed(() => getYear(props.displayMonth))
-const start = computed(() => startOfMonth(props.displayMonth))
-const numberOfWeeks = computed(() => getWeeksInMonth(props.displayMonth, { weekStartsOn: 1 }))
 
 const changedForward = ref(false)
 
-const monthModel = computed(() => computeMonth(props.displayMonth, { decoratorFunction: (d) => ({ yup: d.getDay() == 2 }) }))
-const months = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember']
-const monthName = computed(() => months[month.value])
+const monthModel = computed(() => computeMonth(props.displayMonth))
+const monthTitle = computed(() => format(props.displayMonth, 'LLLL yyyy', { locale: nb }))
 const show = date => window.alert(date)
 
 const getChangedForward = (curr, prev) => {
@@ -40,6 +37,8 @@ const getChangedForward = (curr, prev) => {
   if (curr == 0 && prev == 11) return true
   return curr > prev
 }
+
+const month = computed(() => getMonth(props.displayMonth))
 watch(month, (curr, prev) => {
   changedForward.value = getChangedForward(curr, prev)
 })

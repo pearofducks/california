@@ -1,14 +1,21 @@
 <template>
+  <td>
   <button :class="buttonClasses" @click="$emit('select', date)">
     <span v-if="inCurrentMonth">{{ lightFormat(date, 'd') }}</span>
   </button>
+      </td>
 </template>
 
 <script setup>
-import { lightFormat, getMonth } from 'date-fns'
+import { format, lightFormat, getMonth } from 'date-fns'
+import { nb } from 'date-fns/locale'
 import { computed } from 'vue'
 
-const props = defineProps({ date: Date, month: Number, decorations: { type: Object, default: () => ({}) } })
+const props = defineProps({
+  date: Date,
+  month: Number,
+  decorations: { type: Object, default: () => ({}) }
+})
 const decorations = computed(() => Object.entries(props.decorations).filter(([_, v]) => v).map(([k]) => k))
 
 const inCurrentMonth = computed(() => getMonth(props.date) === props.month)
@@ -19,7 +26,3 @@ const buttonClasses = computed(() => ({
   [decorations.value]: true
 }))
 </script>
-
-<style>
-.yup { background-color: red; }
-</style>
