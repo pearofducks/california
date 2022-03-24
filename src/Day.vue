@@ -1,14 +1,14 @@
 <template>
   <td>
   <button :class="buttonClasses" @click="$emit('select', date)">
-    <span v-if="inCurrentMonth">{{ lightFormat(date, 'd') }}</span>
+    <span v-if="inCurrentMonth">{{ formatDateButton(date) }}</span>
   </button>
       </td>
 </template>
 
 <script setup>
-import { format, lightFormat, getMonth } from 'date-fns'
-import { nb } from 'date-fns/locale'
+import { getMonth } from 'date-fns'
+import { formatDateButton } from '../logic'
 import { computed } from 'vue'
 
 const props = defineProps({

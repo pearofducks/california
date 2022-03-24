@@ -1,13 +1,7 @@
 <script>
-import { format } from 'date-fns'
-import { nb } from 'date-fns/locale'
+import { generateWeekdays } from '../logic'
 
-const d = new Date
-// programatically get days from Monday to Sunday
-const weekdays = Array.from({ length: 7 }).map((_, i) => {
-  const day = new Date(d.setDate(d.getDate() - d.getDay() + 1 + i))
-  return format(day, 'cccccc', { locale: nb })
-})
+const weekdays = generateWeekdays()
 
 export default {
   setup: () => ({ weekdays })

@@ -1,9 +1,12 @@
-import { startOfWeek, getWeeksInMonth, startOfMonth, addDays, isWithinInterval } from 'date-fns'
+import { format, startOfWeek, getWeeksInMonth, startOfMonth, addDays, isWithinInterval } from 'date-fns'
+import { nb } from 'date-fns/locale'
+
+const weekStartsOn = 1
 
 export const computeMonth = (month, { disabledFunction, startRange, endRange, decoratorFunction } = {}) => {
   if (!month instanceof Date) throw `First argument must be a Date`
-  const weeksInMonth = getWeeksInMonth(month, { weekStartsOn: 1 })
-  let dateIndex = startOfWeek(startOfMonth(month), { weekStartsOn: 1 })
+  const weeksInMonth = getWeeksInMonth(month, { weekStartsOn })
+  let dateIndex = startOfWeek(startOfMonth(month), { weekStartsOn })
 
   return Array.from({ length: weeksInMonth }, () => {
     return Array.from({ length: 7 }, () => {
@@ -17,4 +20,22 @@ export const computeMonth = (month, { disabledFunction, startRange, endRange, de
       return result
     })
   })
+}
+
+export const generateWeekdays = () => {
+  const d = new Date
+  return Array.from({ length: 7 }).map((_, i) => {
+    const day = new Date(d.setDate(d.getDate() - d.getDay() + weekStartsOn + i))
+    return format(day, 'cccccc', { locale: nb })
+  })
+}
+
+export const getMonthHeading = date => format(date, 'LLLL yyyy', { locale: nb })
+
+export const formatDateButton = date => format(date, 'd', { locale: nb })
+
+export const getChangedForward = (curr, prev) => {
+  if (curr == 11 && prev == 0) return false
+  if (curr == 0 && prev == 11) return true
+  return curr > prev
 }

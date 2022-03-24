@@ -17,10 +17,9 @@
 <script setup>
 import WeekdayTitles from './WeekdayTitles.vue'
 import Day from './Day.vue'
-import { format, getMonth, getYear } from 'date-fns'
-import { nb } from 'date-fns/locale'
+import { getMonth } from 'date-fns'
 import { computed, ref, watch } from 'vue'
-import { computeMonth } from '../logic.js'
+import { computeMonth, getMonthHeading, getChangedForward } from '../logic'
 
 const props = defineProps({
   displayMonth: Date
@@ -29,14 +28,8 @@ const props = defineProps({
 const changedForward = ref(false)
 
 const monthModel = computed(() => computeMonth(props.displayMonth))
-const monthTitle = computed(() => format(props.displayMonth, 'LLLL yyyy', { locale: nb }))
+const monthTitle = computed(() => getMonthHeading(props.displayMonth))
 const show = date => window.alert(date)
-
-const getChangedForward = (curr, prev) => {
-  if (curr == 11 && prev == 0) return false
-  if (curr == 0 && prev == 11) return true
-  return curr > prev
-}
 
 const month = computed(() => getMonth(props.displayMonth))
 watch(month, (curr, prev) => {
