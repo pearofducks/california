@@ -17,7 +17,6 @@
 <script setup>
 import WeekdayTitles from './WeekdayTitles.vue'
 import Day from './Day.vue'
-import { getMonth } from 'date-fns'
 import { computed, ref, watch } from 'vue'
 import { computeMonth, getMonthHeading, getChangedForward } from '../logic'
 
@@ -31,7 +30,7 @@ const monthModel = computed(() => computeMonth(props.displayMonth))
 const monthTitle = computed(() => getMonthHeading(props.displayMonth))
 const show = date => window.alert(date)
 
-const month = computed(() => getMonth(props.displayMonth))
+const month = computed(() => props.displayMonth.getMonth())
 watch(month, (curr, prev) => {
   changedForward.value = getChangedForward(curr, prev)
 })

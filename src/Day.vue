@@ -7,7 +7,6 @@
 </template>
 
 <script setup>
-import { getMonth } from 'date-fns'
 import { formatDateButton } from '../logic'
 import { computed } from 'vue'
 
@@ -18,7 +17,7 @@ const props = defineProps({
 })
 const decorations = computed(() => Object.entries(props.decorations).filter(([_, v]) => v).map(([k]) => k))
 
-const inCurrentMonth = computed(() => getMonth(props.date) === props.month)
+const inCurrentMonth = computed(() => props.date.getMonth() === props.month)
 const buttonClasses = computed(() => ({
   ['mb-0 tabular-nums w-full text-center p-8 rounded-full']: true,
   ['pointer-events-none']: !inCurrentMonth.value,
