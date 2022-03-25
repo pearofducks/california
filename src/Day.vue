@@ -1,5 +1,5 @@
 <template>
-  <td class="w-full" :class="buttonClasses" :aria-label="ariaLabel">
+  <td class="w-full" :class="buttonClasses" :aria-label="ariaLabel" :aria-disabled="disabled">
     <button @click="$emit('select', date)">
       <span v-if="inCurrentMonth">{{ getDateLabel(date) }}</span>
     </button>
@@ -13,6 +13,7 @@ import { computed } from 'vue'
 const props = defineProps({
   date: Date,
   month: Number,
+  disabled: Boolean,
   decorations: { type: Object, default: () => ({}) }
 })
 const decorations = computed(() => Object.entries(props.decorations).filter(([_, v]) => v).map(([k]) => k))
@@ -23,6 +24,7 @@ const buttonClasses = computed(() => ({
   ['mb-0 tabular-nums w-full text-center p-8 rounded-full']: true,
   ['pointer-events-none']: !inCurrentMonth.value,
   ['hover:bg-gray-200 focus-ring cursor-pointer']: inCurrentMonth.value,
+  ['pointer-events-none text-gray-300']: props.disabled,
   [decorations.value]: true
 }))
 </script>

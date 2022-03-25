@@ -21,12 +21,13 @@ import { computed, ref, watch } from 'vue'
 import { computeMonth, getMonthHeading, getChangedForward } from '../logic'
 
 const props = defineProps({
-  displayMonth: Date
+  displayMonth: Date,
+  options: Object
 })
 
 const changedForward = ref(false)
 
-const monthModel = computed(() => computeMonth(props.displayMonth))
+const monthModel = computed(() => computeMonth(props.displayMonth, props.options))
 const monthTitle = computed(() => getMonthHeading(props.displayMonth))
 const show = date => window.alert(date)
 

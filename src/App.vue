@@ -1,15 +1,18 @@
 <script setup>
 import Month from './Month.vue'
-import { addMonths } from 'date-fns'
+import { addMonths, isBefore } from 'date-fns'
 import { ref, computed } from 'vue'
 
-const dayModel = ref(new Date('December 31, 2021'))
+const dayModel = ref(new Date())
 const nextDayModel = computed(() => addMonths(dayModel.value, 1))
 const prevMonth = () => {
   dayModel.value = addMonths(dayModel.value, -1)
 }
 const nextMonth = () => {
   dayModel.value = addMonths(dayModel.value, 1)
+}
+const opts = {
+  disabledFunction: d => isBefore(d, new Date)
 }
 </script>
 
@@ -19,8 +22,8 @@ const nextMonth = () => {
     •
     <button @click="nextMonth">Next month</button>
     <div class="flex gap-32">
-    <month :display-month="dayModel" />
-    <month :display-month="nextDayModel" />
+    <month :display-month="dayModel" :options="opts" />
+    <month :display-month="nextDayModel" :options="opts" />
     </div>
   </main>
 </template>

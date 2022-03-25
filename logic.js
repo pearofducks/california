@@ -1,4 +1,4 @@
-import { format, startOfWeek, getWeeksInMonth, startOfMonth, addDays, isWithinInterval } from 'date-fns'
+import { format, startOfWeek, getWeeksInMonth, startOfMonth, addDays, isWithinInterval, isEqual } from 'date-fns'
 import { nb } from 'date-fns/locale'
 
 const weekStartsOn = 1
@@ -15,7 +15,8 @@ export const computeMonth = (month, { disabledFunction, startRange, endRange, de
       const result = { date }
       if (disabledFunction) result.disabled = disabledFunction(date)
       if (decoratorFunction) result.decorations = decoratorFunction(date)
-      if (startRange && endRange) result.active = isWithinInterval(date, startRange, endRange)
+      if (startRange && endRange) result.selected = isWithinInterval(date, startRange, endRange)
+      if (isEqual(date, startRange) || isEqual(date, endRange)) result.active = true
 
       return result
     })
@@ -23,11 +24,11 @@ export const computeMonth = (month, { disabledFunction, startRange, endRange, de
 }
 
 export const generateWeekdays = () => {
-  const d = new Date
-  return Array.from({ length: 7 }).map((_, i) => {
-    const day = new Date(d.setDate(d.getDate() - d.getDay() + weekStartsOn + i))
-    return format(day, 'cccccc', { locale: nb })
-  })
+  const d = new Date()
+  return Array.from({ length: 7 }).map((_, i) => format(
+    new Date(d.setDate(d.getDate() - d.getDay() + weekStartsOn + i)),
+    'cccccc', { locale: nb }
+  ))
 }
 
 export const getMonthHeading = date => format(date, 'LLLL yyyy', { locale: nb })
