@@ -8,7 +8,7 @@
     <table role="grid">
       <weekday-titles />
       <tr v-for="week in monthModel" :key="week" class="grid grid-cols-7 text-14 justify-items-center">
-        <day v-for="d in week" :key="d.date" :date="d.date" :month="month" @select="show" :decorations="d.decorations" />
+        <day v-for="d in week" :key="d.date" :month="month" @select="show" v-bind="d" />
       </tr>
     </table>
   </section>
