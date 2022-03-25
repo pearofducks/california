@@ -1,13 +1,13 @@
 <template>
-  <td>
-  <button :class="buttonClasses" @click="$emit('select', date)">
-    <span v-if="inCurrentMonth">{{ formatDateButton(date) }}</span>
-  </button>
-      </td>
+  <td class="w-full" :class="buttonClasses" :aria-label="ariaLabel">
+    <button @click="$emit('select', date)">
+      <span v-if="inCurrentMonth">{{ getDateLabel(date) }}</span>
+    </button>
+  </td>
 </template>
 
 <script setup>
-import { formatDateButton } from '../logic'
+import { getDateLabel, getDateAria } from '../logic'
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -16,6 +16,7 @@ const props = defineProps({
   decorations: { type: Object, default: () => ({}) }
 })
 const decorations = computed(() => Object.entries(props.decorations).filter(([_, v]) => v).map(([k]) => k))
+const ariaLabel = computed(() => getDateAria(props.date))
 
 const inCurrentMonth = computed(() => props.date.getMonth() === props.month)
 const buttonClasses = computed(() => ({

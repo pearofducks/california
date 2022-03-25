@@ -32,7 +32,12 @@ export const generateWeekdays = () => {
 
 export const getMonthHeading = date => format(date, 'LLLL yyyy', { locale: nb })
 
-export const formatDateButton = date => format(date, 'd', { locale: nb })
+export const getDateLabel = date => format(date, 'd', { locale: nb })
+export const getDateAria = date => format(date, 'eeee do LLLL yyyy', { locale: nb })
+// aria-label gains "Valgt startdato:" if start date (maybe should just be owned by userland what this is decorated by?)
+// aria-selected - if in selection
+// aria-disabled - if not pickable
+// aria-current="date" - if is today?
 
 export const getChangedForward = (curr, prev) => {
   if (curr == 11 && prev == 0) return false
